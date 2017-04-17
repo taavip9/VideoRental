@@ -13,51 +13,21 @@ public class MovieRental {
 
     }
 
-    public void paywithbonus(Customer client, String moviename, int days){
+    //Method to change the type of the movie. Type 1 - New release, 2 - Regular rental, 3 - Old movie
 
-        Movie movierent = findmovievianame(MoviesLibrary, moviename);
-
-        if (client.bonuspoints<25*days) {
-            throw new RuntimeException("Not enough bonus points to pay for rental. Required bonus points: "
-                    +25*days+", currently have: "+client.bonuspoints+" points.");
-        } else {
-
-            if (movierent.getmtype() == 1) {
-                rentoutMovie(movierent.getmname(), days, client);
-                client.bonuspoints = client.bonuspoints - (25 * days);
-                System.out.println("Movie rental for movie "+movierent.getmname()+" paid with" +
-                        " bonus points for "+days+" day(s). "+client.bonuspoints+" bonus points remain");
-            } else if (movierent.getmtype() == 2){
-                throw new RuntimeException("Bonus points can only be used to rent new releases. Current movie is" +
-                        " a regular rental");
-            } else {
-                throw new RuntimeException("Bonus points can only be used to rent new releases. Current movie is" +
-                        " an old film");
-            }
-        }
-    }
-
-
-    public void rentoutMovie(String moviename, int days, Customer client){
-
+    public void changemovietype(String moviename, int newtype){
         Movie result = findmovievianame(MoviesLibrary, moviename);
-        if (result != null){
-            Rental new_rental = new Rental(days, result);
-            client.rentedfilms.add(new_rental);
-
-            if(result.getmtype()!=1){
-                client.bonuspoints = client.bonuspoints+2;
-            } else {
-                client.bonuspoints ++;
-            }
-
-            RentedMovies.add(result);
-            MoviesLibrary.remove(result);
-        }else{
-            throw new RuntimeException("Movie "+moviename+" is not in the database and therefore can't be" +
-                " rented. Please check movie name.");
-        }
+        MoviesLibrary.get(MoviesLibrary.indexOf(result)).changeType(newtype);
     }
+
+    //Method to change a movie's name, in case it was inserted incorrectly etc
+
+    public void changemoviename (String moviename, String newname){
+        Movie result = findmovievianame(MoviesLibrary, moviename);
+        MoviesLibrary.get(MoviesLibrary.indexOf(result)).changeName(newname);
+    }
+
+    //Method to calculate the total fare for a rental
 
     public int customerTotal(Customer client){
         int totalprice=0;
@@ -69,6 +39,61 @@ public class MovieRental {
         System.out.println("Total price: "+totalprice+"EUR");
         return totalprice;
     }
+
+    //List movies that are not rented out
+
+    public void getlibmovies(){
+        for(int i = 0; i<MoviesLibrary.size();i++){
+            System.out.println(MoviesLibrary.get(i).getmname()+", "+
+                    MoviesLibrary.get(i).getmtype());
+        }
+    }
+
+    //List all movies in library
+
+    public void listallfilms (){
+        for(int i = 0; i<MoviesLibrary.size();i++){
+            System.out.println(MoviesLibrary.get(i).getmname()+", "+
+                    MoviesLibrary.get(i).getmtype());
+        }
+        for(int i = 0; i<RentedMovies.size();i++){
+            System.out.println(RentedMovies.get(i).getmname()+", "+
+                    RentedMovies.get(i).getmtype());
+        }
+    }
+
+    //Method to add a new movie to the library
+
+    public void addnewmovie(String moviename, int category){
+        MoviesLibrary.add(new Movie(category, moviename));
+        System.out.println("Movie "+moviename+" added to the database.");
+    }
+
+    //Method to remove a movie from the library
+
+    public void removemovie (String moviename){
+
+        if (findmovievianame(MoviesLibrary, moviename)!=null){
+            System.out.println("Movie "+moviename+" removed from library.");
+            MoviesLibrary.remove(findmovievianame(MoviesLibrary, moviename));
+        } else {
+            throw new RuntimeException("Movie "+moviename+" is not in the database and therefore can't be" +
+                    " removed. Please check movie name.");
+        }
+    }
+
+    //Method to find a movie from a list by inserting a String value in the method
+
+    public Movie findmovievianame (List<Movie> listing, String moviename){
+        for (Movie movie: listing){
+            if (movie.getmname().equals(moviename)){
+                return movie;
+            }
+        }
+        return null;
+    }
+
+    //Method that checks if a movie is rented out and returns it. Late fees will also be calculated using this method
 
     public void returnmovie(String moviename, int latedays, Customer client){
 
@@ -101,46 +126,53 @@ public class MovieRental {
 
     }
 
-    public void getlibmovies(){
-        for(int i = 0; i<MoviesLibrary.size();i++){
-            System.out.println(MoviesLibrary.get(i).getmname()+", "+
-                    MoviesLibrary.get(i).getmtype());
-        }
-    }
+    //Method that checks if a client has enough bonus points. If so, it can be used to pay for new rentals
 
-    public void listallfilms (){
-        for(int i = 0; i<MoviesLibrary.size();i++){
-            System.out.println(MoviesLibrary.get(i).getmname()+", "+
-                    MoviesLibrary.get(i).getmtype());
-        }
-        for(int i = 0; i<RentedMovies.size();i++){
-            System.out.println(RentedMovies.get(i).getmname()+", "+
-                    RentedMovies.get(i).getmtype());
-        }
-    }
-    public void addnewmovie(String moviename, int category){
-        MoviesLibrary.add(new Movie(category, moviename));
-        System.out.println("Movie "+moviename+" added to the database.");
-    }
+    public void paywithbonus(Customer client, String moviename, int days){
 
-    public void removemovie (String moviename){
+        Movie movierent = findmovievianame(MoviesLibrary, moviename);
 
-        if (findmovievianame(MoviesLibrary, moviename)!=null){
-            System.out.println("Movie "+moviename+" removed from library.");
-            MoviesLibrary.remove(findmovievianame(MoviesLibrary, moviename));
+        if (client.bonuspoints<25*days) {
+            throw new RuntimeException("Not enough bonus points to pay for rental. Required bonus points: "
+                    +25*days+", currently have: "+client.bonuspoints+" points.");
         } else {
-            throw new RuntimeException("Movie "+moviename+" is not in the database and therefore can't be" +
-                    " removed. Please check movie name.");
-        }
-    }
 
-    public Movie findmovievianame (List<Movie> listing, String moviename){
-        for (Movie movie: listing){
-            if (movie.getmname().equals(moviename)){
-                return movie;
+            if (movierent.getmtype() == 1) {
+                rentoutMovie(movierent.getmname(), days, client);
+                client.bonuspoints = client.bonuspoints - (25 * days);
+                System.out.println("Movie rental for movie "+movierent.getmname()+" paid with" +
+                        " bonus points for "+days+" day(s). "+client.bonuspoints+" bonus points remain");
+            } else if (movierent.getmtype() == 2){
+                throw new RuntimeException("Bonus points can only be used to rent new releases. Current movie is" +
+                        " a regular rental");
+            } else {
+                throw new RuntimeException("Bonus points can only be used to rent new releases. Current movie is" +
+                        " an old film");
             }
         }
-        return null;
+    }
+
+    //Method to rent out a movie
+
+    public void rentoutMovie(String moviename, int days, Customer client){
+
+        Movie result = findmovievianame(MoviesLibrary, moviename);
+        if (result != null){
+            Rental new_rental = new Rental(days, result);
+            client.rentedfilms.add(new_rental);
+
+            if(result.getmtype()!=1){
+                client.bonuspoints = client.bonuspoints+2;
+            } else {
+                client.bonuspoints ++;
+            }
+
+            RentedMovies.add(result);
+            MoviesLibrary.remove(result);
+        }else{
+            throw new RuntimeException("Movie "+moviename+" is not in the database and therefore can't be" +
+                    " rented. Please check movie name.");
+        }
     }
 
 

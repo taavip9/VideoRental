@@ -4,12 +4,15 @@ import java.util.List;
 /**
  * Created by Taavi on 15.04.2017.
  */
+
+//A Class that is created when a customer rents a movie
 public class Rental {
 
     Movie RentedMovie;
     int RentedDays;
     int cost;
 
+    //Constructor that calculates the cost of the rental, so that the cost is calculated at creation.
     public Rental (int rentaldays, Movie moviename){
         RentedDays = rentaldays;
         RentedMovie = moviename;
@@ -31,10 +34,12 @@ public class Rental {
 
     }
 
+    //Method that returns the number of days rented
     public int getdays(){
         return RentedDays;
     }
 
+    //Method that returns the name of the rented movie
     public Movie getmovie(){
         return RentedMovie;
     }

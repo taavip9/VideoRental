@@ -7,6 +7,7 @@ public class Movie {
     String MovieName;
 
 
+    //Constructor for the Movie class. Movies can only be created with mclass ranging from 1-3.
     public Movie(int mclass, String mname){
 
         if (mclass == 1 || mclass ==2 || mclass==3){
@@ -18,20 +19,24 @@ public class Movie {
         }
     }
 
+    //Method to get a movie's type - 1 - New release, 2 - Regular rental or 3 - an Old movie
     public int getmtype() {
         return MovieClass ;
     }
 
+    //Method to get a movie's name
     public String getmname(){
         return MovieName;
     }
 
+    //Method to change a movie's type
     public int changeType (int typenew){
         MovieClass = typenew;
 
         return MovieClass;
     }
 
+    //Method to change a movie's name
     public String changeName (String namenew){
         MovieName = namenew;
 

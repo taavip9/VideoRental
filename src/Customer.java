@@ -9,12 +9,18 @@ public class Customer {
     List<Rental> rentedfilms = new ArrayList<>();
     int bonuspoints;
 
+    //An empty constructor for the Customer class
+    public Customer (){
+
+    }
+
+    //Method to check if a client has rented a movie
+
     public void ismovierented(Movie movie){
         for (int i = 0; i<rentedfilms.size(); i++){
 
             Movie compmovie = rentedfilms.get(i).getmovie();
             if(compmovie.getmname()==movie.getmname()){
-                System.out.println("rented");
                 rentedfilms.remove(i);
                 break;
             }else{
