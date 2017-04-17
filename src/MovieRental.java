@@ -143,10 +143,10 @@ public class MovieRental {
                 System.out.println("Movie rental for movie "+movierent.getmname()+" paid with" +
                         " bonus points for "+days+" day(s). "+client.bonuspoints+" bonus points remain");
             } else if (movierent.getmtype() == 2){
-                throw new RuntimeException("Bonus points can only be used to rent new releases. Current movie is" +
+                throw new RuntimeException("Bonus points can only be used to rent new releases. Movie "+moviename+" is" +
                         " a regular rental");
             } else {
-                throw new RuntimeException("Bonus points can only be used to rent new releases. Current movie is" +
+                throw new RuntimeException("Bonus points can only be used to rent new releases. Movie "+moviename+" is" +
                         " an old film");
             }
         }
