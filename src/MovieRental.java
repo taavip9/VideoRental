@@ -9,39 +9,42 @@ public class MovieRental {
     List<Movie> MoviesLibrary = new ArrayList<Movie>();
     List<Movie> RentedMovies = new ArrayList<Movie>();
 
+
     public MovieRental(){
 
     }
 
     //Method to change the type of the movie. Type 1 - New release, 2 - Regular rental, 3 - Old movie
-
     public void changemovietype(String moviename, int newtype){
         Movie result = findmovievianame(MoviesLibrary, moviename);
         MoviesLibrary.get(MoviesLibrary.indexOf(result)).changeType(newtype);
     }
 
     //Method to change a movie's name, in case it was inserted incorrectly etc
-
     public void changemoviename (String moviename, String newname){
         Movie result = findmovievianame(MoviesLibrary, moviename);
         MoviesLibrary.get(MoviesLibrary.indexOf(result)).changeName(newname);
     }
 
-    //Method to calculate the total fare for a rental
-
-    public int customerTotal(Customer client){
+    //Method to calculate the total fare for a rental and how much bonus points the client earned
+    public void customerTotal(Customer client){
         int totalprice=0;
+        int bonuspoints=0;
         for(int  i=0; i<client.rentedfilms.size();i++){
             Rental rental = client.rentedfilms.get(i);
+            if(rental.getmovie().getmtype()==1){
+                bonuspoints=bonuspoints+2;
+            }else{
+                bonuspoints++;
+            }
             System.out.println("Movie "+rental.getmovie().getmname()+", price: "+rental.cost+"EUR");
             totalprice = totalprice + rental.cost;
         }
         System.out.println("Total price: "+totalprice+"EUR");
-        return totalprice;
+        System.out.println("Bonus points earned: "+bonuspoints);
     }
 
     //List movies that are not rented out
-
     public void getlibmovies(){
         for(int i = 0; i<MoviesLibrary.size();i++){
             System.out.println(MoviesLibrary.get(i).getmname()+", "+
@@ -50,7 +53,6 @@ public class MovieRental {
     }
 
     //List all movies in library
-
     public void listallfilms (){
         for(int i = 0; i<MoviesLibrary.size();i++){
             System.out.println(MoviesLibrary.get(i).getmname()+", "+
@@ -63,14 +65,12 @@ public class MovieRental {
     }
 
     //Method to add a new movie to the library
-
     public void addnewmovie(String moviename, int category){
         MoviesLibrary.add(new Movie(category, moviename));
         System.out.println("Movie "+moviename+" added to the database.");
     }
 
     //Method to remove a movie from the library
-
     public void removemovie (String moviename){
 
         if (findmovievianame(MoviesLibrary, moviename)!=null){
@@ -83,7 +83,6 @@ public class MovieRental {
     }
 
     //Method to find a movie from a list by inserting a String value in the method
-
     public Movie findmovievianame (List<Movie> listing, String moviename){
         for (Movie movie: listing){
             if (movie.getmname().equals(moviename)){
@@ -94,7 +93,6 @@ public class MovieRental {
     }
 
     //Method that checks if a movie is rented out and returns it. Late fees will also be calculated using this method
-
     public void returnmovie(String moviename, int latedays, Customer client){
 
         Movie result = findmovievianame(RentedMovies, moviename);
@@ -127,7 +125,6 @@ public class MovieRental {
     }
 
     //Method that checks if a client has enough bonus points. If so, it can be used to pay for new rentals
-
     public void paywithbonus(Customer client, String moviename, int days){
 
         Movie movierent = findmovievianame(MoviesLibrary, moviename);
@@ -153,7 +150,6 @@ public class MovieRental {
     }
 
     //Method to rent out a movie
-
     public void rentoutMovie(String moviename, int days, Customer client){
 
         Movie result = findmovievianame(MoviesLibrary, moviename);

@@ -32,7 +32,7 @@ public class Movie {
     //Method to change a movie's type
     public int changeType (int typenew){
 
-        if (typenew<1 ||typenew>3){
+        if (typenew<1 || typenew>3){
             throw new RuntimeException("Movies can be only three categories: 1 - New release, 2 - Regular film or " +
                     "3 - Old film. Please select one of those options. Your input for the movie "+MovieName+" was: "+typenew);
         }else{

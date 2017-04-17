@@ -15,7 +15,6 @@ public class Customer {
     }
 
     //Method to check if a client has rented a movie
-
     public void ismovierented(Movie movie){
         for (int i = 0; i<rentedfilms.size(); i++){
 

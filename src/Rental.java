@@ -12,7 +12,7 @@ public class Rental {
     int RentedDays;
     int cost;
 
-    //Constructor that calculates the cost of the rental, so that the cost is calculated at creation.
+    //Constructor that calculates the cost of the rental, so that the cost is calculated at object declaration.
     public Rental (int rentaldays, Movie moviename){
         RentedDays = rentaldays;
         RentedMovie = moviename;
@@ -32,11 +32,6 @@ public class Rental {
             }
         }
 
-    }
-
-    //Method that returns the number of days rented
-    public int getdays(){
-        return RentedDays;
     }
 
     //Method that returns the name of the rented movie
